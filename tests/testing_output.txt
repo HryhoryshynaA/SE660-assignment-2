@@ -1,0 +1,588 @@
+(.venv) adrianahryhoryshyna@MacBook-Pro-Adriana SE660-assignment-2 % python -m pytest --cov=application --cov-report=term-missing
+=================================================================== test session starts ===================================================================
+platform darwin -- Python 3.14.0, pytest-9.1.1, pluggy-1.6.0
+rootdir: /Users/adrianahryhoryshyna/Desktop/SE660-assignment-2
+plugins: cov-7.1.0
+collected 37 items
+
+tests/ai_test.py ...................F......F.FFF.F.F.F                                                                                              [100%]
+
+======================================================================== FAILURES =========================================================================
+_________________________________________________________ TestBookCreate.test_create_book_success _________________________________________________________
+
+self = <ai_test.TestBookCreate object at 0x105d20190>, client = <FlaskClient <Flask 'application'>>
+
+    def test_create_book_success(self, client):
+        author = make_author(client, "Book", "Author")
+        author_id = author.get_json()['id']
+>       resp = make_book(client, author_id, title="1984", year=1949, total_pages=328)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/ai_test.py:161:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests/ai_test.py:27: in make_book
+    resp = client.post('/api/books', json={
+.venv/lib/python3.14/site-packages/werkzeug/test.py:1167: in post
+    return self.open(*args, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/testing.py:235: in open
+    response = super().open(
+.venv/lib/python3.14/site-packages/werkzeug/test.py:1116: in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/werkzeug/test.py:988: in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/werkzeug/test.py:1264: in run_wsgi_app
+    app_rv = app(environ, start_response)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:1536: in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:1514: in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:1511: in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:919: in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:917: in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:902: in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+application/book/book_controller.py:10: in create_book
+    book, errors = book_service.create_book(request_data, author_service)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <application.book.book_service.BookService object at 0x105cc5160>
+request_data = {'authorId': 'c1aaa15a-baa5-4cc3-8f97-ad90754e50da', 'genre': 'FICTION', 'publishedYear': 1949, 'title': '1984', ...}
+author_service = <application.author.author_service.AuthorService object at 0x105cc4ec0>
+
+    def create_book(self, request_data, author_service):
+        errors = self._validate(request_data, author_service)
+        if errors:
+            return None, errors
+        book = self.book_mapper.map_request(request_data)
+>       book.status = self._compute_status(book)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: BookService._compute_status() takes 1 positional argument but 2 were given
+
+application/book/book_service.py:71: TypeError
+_____________________________________________________________ TestBookGet.test_get_book_by_id _____________________________________________________________
+
+self = <ai_test.TestBookGet object at 0x105d207d0>, client = <FlaskClient <Flask 'application'>>
+
+    def test_get_book_by_id(self, client):
+        author = make_author(client)
+        author_id = author.get_json()['id']
+>       created = make_book(client, author_id, title="Findable")
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/ai_test.py:218:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests/ai_test.py:27: in make_book
+    resp = client.post('/api/books', json={
+.venv/lib/python3.14/site-packages/werkzeug/test.py:1167: in post
+    return self.open(*args, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/testing.py:235: in open
+    response = super().open(
+.venv/lib/python3.14/site-packages/werkzeug/test.py:1116: in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/werkzeug/test.py:988: in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/werkzeug/test.py:1264: in run_wsgi_app
+    app_rv = app(environ, start_response)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:1536: in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:1514: in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:1511: in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:919: in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:917: in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:902: in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+application/book/book_controller.py:10: in create_book
+    book, errors = book_service.create_book(request_data, author_service)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <application.book.book_service.BookService object at 0x105cc5160>
+request_data = {'authorId': '8eda08ab-6b93-4644-9595-7c224db84d2e', 'genre': 'FICTION', 'publishedYear': 2020, 'title': 'Findable', ...}
+author_service = <application.author.author_service.AuthorService object at 0x105cc4ec0>
+
+    def create_book(self, request_data, author_service):
+        errors = self._validate(request_data, author_service)
+        if errors:
+            return None, errors
+        book = self.book_mapper.map_request(request_data)
+>       book.status = self._compute_status(book)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: BookService._compute_status() takes 1 positional argument but 2 were given
+
+application/book/book_service.py:71: TypeError
+_____________________________________________________________ TestBookGet.test_get_books_list _____________________________________________________________
+
+self = <ai_test.TestBookGet object at 0x105d189d0>, client = <FlaskClient <Flask 'application'>>
+
+    def test_get_books_list(self, client):
+>       resp = client.get('/api/books')
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/ai_test.py:229:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.14/site-packages/werkzeug/test.py:1162: in get
+    return self.open(*args, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/testing.py:235: in open
+    response = super().open(
+.venv/lib/python3.14/site-packages/werkzeug/test.py:1116: in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/werkzeug/test.py:988: in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/werkzeug/test.py:1264: in run_wsgi_app
+    app_rv = app(environ, start_response)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:1536: in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:1514: in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:1511: in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:919: in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:917: in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:902: in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    @app.route('/api/books', methods=['GET'])
+    def get_books():
+        page = request.args.get('page')
+        size = request.args.get('size')
+        genre = request.args.get('genre')
+        status = request.args.get('status')
+        author_id = request.args.get('authorId')
+        year_from = request.args.get('publishedYearFrom')
+        year_to = request.args.get('publishedYearTo')
+        sort = request.args.get('sort', 'title')
+        order = request.args.get('order', 'asc')
+
+        try:
+            page = int(page) if page is not None else 1
+            size = int(size) if size is not None else 20
+            if page < 1:
+                return jsonify({'error': 'VALIDATION_ERROR', 'message': 'page must be >= 1'}), 400
+            if not (1 <= size <= 100):
+                return jsonify({'error': 'VALIDATION_ERROR', 'message': 'size must be between 1 and 100'}), 400
+        except ValueError:
+            return jsonify({'error': 'VALIDATION_ERROR', 'message': 'page and size must be integers'}), 400
+
+        try:
+            if year_from is not None:
+                yf = int(year_from)
+            if year_to is not None:
+                yt = int(year_to)
+>           if yf is not None and yt is not None and yf > yt:
+               ^^
+E           UnboundLocalError: cannot access local variable 'yf' where it is not associated with a value
+
+application/book/book_controller.py:42: UnboundLocalError
+_________________________________________________________ TestBookGet.test_get_books_invalid_sort _________________________________________________________
+
+self = <ai_test.TestBookGet object at 0x105d18b00>, client = <FlaskClient <Flask 'application'>>
+
+    def test_get_books_invalid_sort(self, client):
+>       resp = client.get('/api/books?sort=invalidField')
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/ai_test.py:234:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.14/site-packages/werkzeug/test.py:1162: in get
+    return self.open(*args, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/testing.py:235: in open
+    response = super().open(
+.venv/lib/python3.14/site-packages/werkzeug/test.py:1116: in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/werkzeug/test.py:988: in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/werkzeug/test.py:1264: in run_wsgi_app
+    app_rv = app(environ, start_response)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:1536: in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:1514: in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:1511: in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:919: in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:917: in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:902: in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    @app.route('/api/books', methods=['GET'])
+    def get_books():
+        page = request.args.get('page')
+        size = request.args.get('size')
+        genre = request.args.get('genre')
+        status = request.args.get('status')
+        author_id = request.args.get('authorId')
+        year_from = request.args.get('publishedYearFrom')
+        year_to = request.args.get('publishedYearTo')
+        sort = request.args.get('sort', 'title')
+        order = request.args.get('order', 'asc')
+
+        try:
+            page = int(page) if page is not None else 1
+            size = int(size) if size is not None else 20
+            if page < 1:
+                return jsonify({'error': 'VALIDATION_ERROR', 'message': 'page must be >= 1'}), 400
+            if not (1 <= size <= 100):
+                return jsonify({'error': 'VALIDATION_ERROR', 'message': 'size must be between 1 and 100'}), 400
+        except ValueError:
+            return jsonify({'error': 'VALIDATION_ERROR', 'message': 'page and size must be integers'}), 400
+
+        try:
+            if year_from is not None:
+                yf = int(year_from)
+            if year_to is not None:
+                yt = int(year_to)
+>           if yf is not None and yt is not None and yf > yt:
+               ^^
+E           UnboundLocalError: cannot access local variable 'yf' where it is not associated with a value
+
+application/book/book_controller.py:42: UnboundLocalError
+________________________________________________________ TestBookGet.test_get_books_invalid_order _________________________________________________________
+
+self = <ai_test.TestBookGet object at 0x105c9e330>, client = <FlaskClient <Flask 'application'>>
+
+    def test_get_books_invalid_order(self, client):
+>       resp = client.get('/api/books?order=sideways')
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/ai_test.py:238:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.14/site-packages/werkzeug/test.py:1162: in get
+    return self.open(*args, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/testing.py:235: in open
+    response = super().open(
+.venv/lib/python3.14/site-packages/werkzeug/test.py:1116: in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/werkzeug/test.py:988: in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/werkzeug/test.py:1264: in run_wsgi_app
+    app_rv = app(environ, start_response)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:1536: in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:1514: in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:1511: in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:919: in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:917: in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:902: in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    @app.route('/api/books', methods=['GET'])
+    def get_books():
+        page = request.args.get('page')
+        size = request.args.get('size')
+        genre = request.args.get('genre')
+        status = request.args.get('status')
+        author_id = request.args.get('authorId')
+        year_from = request.args.get('publishedYearFrom')
+        year_to = request.args.get('publishedYearTo')
+        sort = request.args.get('sort', 'title')
+        order = request.args.get('order', 'asc')
+
+        try:
+            page = int(page) if page is not None else 1
+            size = int(size) if size is not None else 20
+            if page < 1:
+                return jsonify({'error': 'VALIDATION_ERROR', 'message': 'page must be >= 1'}), 400
+            if not (1 <= size <= 100):
+                return jsonify({'error': 'VALIDATION_ERROR', 'message': 'size must be between 1 and 100'}), 400
+        except ValueError:
+            return jsonify({'error': 'VALIDATION_ERROR', 'message': 'page and size must be integers'}), 400
+
+        try:
+            if year_from is not None:
+                yf = int(year_from)
+            if year_to is not None:
+                yt = int(year_to)
+>           if yf is not None and yt is not None and yf > yt:
+               ^^
+E           UnboundLocalError: cannot access local variable 'yf' where it is not associated with a value
+
+application/book/book_controller.py:42: UnboundLocalError
+_______________________________________________________ TestBookGet.test_get_books_filter_by_genre ________________________________________________________
+
+self = <ai_test.TestBookGet object at 0x105caf8a0>, client = <FlaskClient <Flask 'application'>>
+
+    def test_get_books_filter_by_genre(self, client):
+        author = make_author(client)
+        author_id = author.get_json()['id']
+>       make_book(client, author_id, genre="SCIENCE")
+
+tests/ai_test.py:248:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests/ai_test.py:27: in make_book
+    resp = client.post('/api/books', json={
+.venv/lib/python3.14/site-packages/werkzeug/test.py:1167: in post
+    return self.open(*args, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/testing.py:235: in open
+    response = super().open(
+.venv/lib/python3.14/site-packages/werkzeug/test.py:1116: in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/werkzeug/test.py:988: in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/werkzeug/test.py:1264: in run_wsgi_app
+    app_rv = app(environ, start_response)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:1536: in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:1514: in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:1511: in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:919: in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:917: in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:902: in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+application/book/book_controller.py:10: in create_book
+    book, errors = book_service.create_book(request_data, author_service)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <application.book.book_service.BookService object at 0x105cc5160>
+request_data = {'authorId': 'a733f8da-023e-4000-98bd-c4d0a9816645', 'genre': 'SCIENCE', 'publishedYear': 2020, 'title': 'Test Book', ...}
+author_service = <application.author.author_service.AuthorService object at 0x105cc4ec0>
+
+    def create_book(self, request_data, author_service):
+        errors = self._validate(request_data, author_service)
+        if errors:
+            return None, errors
+        book = self.book_mapper.map_request(request_data)
+>       book.status = self._compute_status(book)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: BookService._compute_status() takes 1 positional argument but 2 were given
+
+application/book/book_service.py:71: TypeError
+_________________________________________________________ TestBookDelete.test_delete_book_success _________________________________________________________
+
+self = <ai_test.TestBookDelete object at 0x105d20cd0>, client = <FlaskClient <Flask 'application'>>
+
+    def test_delete_book_success(self, client):
+        author = make_author(client)
+        author_id = author.get_json()['id']
+>       created = make_book(client, author_id, title="ToDelete")
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/ai_test.py:263:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests/ai_test.py:27: in make_book
+    resp = client.post('/api/books', json={
+.venv/lib/python3.14/site-packages/werkzeug/test.py:1167: in post
+    return self.open(*args, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/testing.py:235: in open
+    response = super().open(
+.venv/lib/python3.14/site-packages/werkzeug/test.py:1116: in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/werkzeug/test.py:988: in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/werkzeug/test.py:1264: in run_wsgi_app
+    app_rv = app(environ, start_response)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:1536: in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:1514: in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:1511: in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:919: in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:917: in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:902: in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+application/book/book_controller.py:10: in create_book
+    book, errors = book_service.create_book(request_data, author_service)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <application.book.book_service.BookService object at 0x105cc5160>
+request_data = {'authorId': 'fecb771f-38e2-4a9d-9a22-997fae3ff987', 'genre': 'FICTION', 'publishedYear': 2020, 'title': 'ToDelete', ...}
+author_service = <application.author.author_service.AuthorService object at 0x105cc4ec0>
+
+    def create_book(self, request_data, author_service):
+        errors = self._validate(request_data, author_service)
+        if errors:
+            return None, errors
+        book = self.book_mapper.map_request(request_data)
+>       book.status = self._compute_status(book)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: BookService._compute_status() takes 1 positional argument but 2 were given
+
+application/book/book_service.py:71: TypeError
+____________________________________________ TestAuthorBookRelationship.test_delete_author_with_books_conflict ____________________________________________
+
+self = <ai_test.TestAuthorBookRelationship object at 0x105d20f50>, client = <FlaskClient <Flask 'application'>>
+
+    def test_delete_author_with_books_conflict(self, client):
+        author = make_author(client, "Has", "Books")
+        author_id = author.get_json()['id']
+>       make_book(client, author_id, title="Linked Book")
+
+tests/ai_test.py:277:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests/ai_test.py:27: in make_book
+    resp = client.post('/api/books', json={
+.venv/lib/python3.14/site-packages/werkzeug/test.py:1167: in post
+    return self.open(*args, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/testing.py:235: in open
+    response = super().open(
+.venv/lib/python3.14/site-packages/werkzeug/test.py:1116: in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/werkzeug/test.py:988: in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/werkzeug/test.py:1264: in run_wsgi_app
+    app_rv = app(environ, start_response)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:1536: in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:1514: in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:1511: in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:919: in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:917: in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/flask/app.py:902: in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+application/book/book_controller.py:10: in create_book
+    book, errors = book_service.create_book(request_data, author_service)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <application.book.book_service.BookService object at 0x105cc5160>
+request_data = {'authorId': '78d39d3b-3470-4c4f-aeba-2dd83d8be864', 'genre': 'FICTION', 'publishedYear': 2020, 'title': 'Linked Book', ...}
+author_service = <application.author.author_service.AuthorService object at 0x105cc4ec0>
+
+    def create_book(self, request_data, author_service):
+        errors = self._validate(request_data, author_service)
+        if errors:
+            return None, errors
+        book = self.book_mapper.map_request(request_data)
+>       book.status = self._compute_status(book)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: BookService._compute_status() takes 1 positional argument but 2 were given
+
+application/book/book_service.py:71: TypeError
+===================================================================== tests coverage ======================================================================
+____________________________________________________ coverage: platform darwin, python 3.14.0-final-0 _____________________________________________________
+
+Name                                               Stmts   Miss  Cover   Missing
+--------------------------------------------------------------------------------
+application/__init__.py                                8      0   100%
+application/author/author_controller.py               50      1    98%   56
+application/author/author_service.py                  67      2    97%   50-51
+application/author/model/dto/author.py                 4      0   100%
+application/author/model/mapper/author_mapper.py      10      1    90%   17
+application/book/book_controller.py                   67     17    75%   13, 31, 33-35, 45-53, 60, 68-70, 77
+application/book/book_service.py                     106     48    55%   11-15, 22-26, 39, 49, 55, 62, 72-73, 79, 85-96, 101-102, 108-128
+application/book/model/dto/book.py                     6      0   100%
+application/book/model/mapper/book_mapper.py          11      2    82%   26, 43
+application/models.py                                 15      1    93%   13
+--------------------------------------------------------------------------------
+TOTAL                                                344     72    79%
+================================================================= short test summary info =================================================================
+FAILED tests/ai_test.py::TestBookCreate::test_create_book_success - TypeError: BookService._compute_status() takes 1 positional argument but 2 were given
+FAILED tests/ai_test.py::TestBookGet::test_get_book_by_id - TypeError: BookService._compute_status() takes 1 positional argument but 2 were given
+FAILED tests/ai_test.py::TestBookGet::test_get_books_list - UnboundLocalError: cannot access local variable 'yf' where it is not associated with a value
+FAILED tests/ai_test.py::TestBookGet::test_get_books_invalid_sort - UnboundLocalError: cannot access local variable 'yf' where it is not associated with a value
+FAILED tests/ai_test.py::TestBookGet::test_get_books_invalid_order - UnboundLocalError: cannot access local variable 'yf' where it is not associated with a value
+FAILED tests/ai_test.py::TestBookGet::test_get_books_filter_by_genre - TypeError: BookService._compute_status() takes 1 positional argument but 2 were given
+FAILED tests/ai_test.py::TestBookDelete::test_delete_book_success - TypeError: BookService._compute_status() takes 1 positional argument but 2 were given
+FAILED tests/ai_test.py::TestAuthorBookRelationship::test_delete_author_with_books_conflict - TypeError: BookService._compute_status() takes 1 positional argument but 2 were given
+============================================================== 8 failed, 29 passed in 0.62s ===============================================================
