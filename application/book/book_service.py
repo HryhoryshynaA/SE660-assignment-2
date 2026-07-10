@@ -18,7 +18,7 @@ class BookService:
     def __init__(self):
         self.book_mapper = BookMapper()
 
-    def _compute_status(book: Book) -> str:
+    def _compute_status(self, book: Book) -> str:
         if book.pages_read == 0:
             return 'UNREAD'
         if book.pages_read >= book.total_pages:

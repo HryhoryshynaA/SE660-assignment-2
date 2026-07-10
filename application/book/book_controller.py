@@ -35,12 +35,12 @@ def get_books():
         return jsonify({'error': 'VALIDATION_ERROR', 'message': 'page and size must be integers'}), 400
 
     try:
-        if year_from is not None:
-            yf = int(year_from)
-        if year_to is not None:
-            yt = int(year_to)
+        yf = int(year_from) if year_from is not None else None
+        yt = int(year_to) if year_to is not None else None
+
         if yf is not None and yt is not None and yf > yt:
-            return jsonify({'error': 'VALIDATION_ERROR', 'message': 'publishedYearFrom must be <= publishedYearTo'}), 400
+            return jsonify(
+                {'error': 'VALIDATION_ERROR', 'message': 'publishedYearFrom must be <= publishedYearTo'}), 400
     except ValueError:
         return jsonify({'error': 'VALIDATION_ERROR', 'message': 'year filters must be integers'}), 400
 
