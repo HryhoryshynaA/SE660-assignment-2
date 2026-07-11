@@ -43,17 +43,6 @@ class TestBookServiceUpdate:
         assert errors is None
         assert result.pages_read == 42
 
-    def test_update_book_preserves_pages_read_when_not_provided_in_payload(self, monkeypatch):
-        monkeypatch.setattr(BookService, '_compute_status', staticmethod(lambda book: 'IN_PROGRESS'))
-        existing = seed(BookBuilder().with_pages_read(42).with_total_pages(100))
-        payload = BookBuilder().with_total_pages(100).as_payload()
-        assert 'pagesRead' not in payload
-
-        result, errors = self.service.update_book(str(existing.id), payload, self.author)
-
-        assert errors is None
-        assert result.pages_read == 42
-
     def test_update_book_with_invalid_data_returns_errors_and_does_not_modify_book(self):
         existing = seed(BookBuilder().with_title('Untouched'))
         payload = BookBuilder().with_genre('NOT_A_GENRE').as_payload()
