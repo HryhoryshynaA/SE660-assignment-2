@@ -4,21 +4,14 @@ from tests.conftest import AUTHOR_CONTRACT
 
 
 def test_create_and_get_author_contract(client):
-    # 1. Створення автора (POST)
     payload = AuthorBuilder().with_first_name("Taras").with_last_name("Shevchenko").as_payload()
 
     response = client.post('/api/authors', json=payload)
     assert response.status_code == 201
-
     response_data = response.get_json()
-
-    # Валідація контракту відповіді
     validate(instance=response_data, schema=AUTHOR_CONTRACT)
-
     author_id = response_data['id']
     assert response_data['firstName'] == "Taras"
-
-    # 2. Отримання автора (GET) та перевірка того ж контракту
     get_response = client.get(f'/api/authors/{author_id}')
     assert get_response.status_code == 200
 
@@ -28,14 +21,11 @@ def test_create_and_get_author_contract(client):
 
 
 def test_create_author_validation_error_contract(client):
-    # Перевірка контракту помилки (наприклад, пусте ім'я)
     payload = AuthorBuilder().with_first_name("").as_payload()
 
     response = client.post('/api/authors', json=payload)
     assert response.status_code == 400
 
     error_data = response.get_json()
-
-    # Контракт помилки повинен містити error, message та details
     assert error_data['error'] == 'VALIDATION_ERROR'
     assert 'firstName must be 1–100 characters' in error_data['details']

@@ -5,7 +5,6 @@ from tests.builders.book_builder import BookBuilder
 
 
 class _AuthorServiceStub:
-    """Мінімальний стаб замість AuthorService — контролюємо does_author_exists напряму."""
     def __init__(self, exists=True):
         self._exists = exists
 

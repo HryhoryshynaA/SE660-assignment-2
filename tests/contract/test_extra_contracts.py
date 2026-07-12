@@ -50,8 +50,6 @@ def test_pagination_contract_for_books(client):
 
     response_data = response.get_json()
     validate(instance=response_data, schema=PAGE_CONTRACT)
-
-    # 4. Перевірка бізнес-логіки пагінації
     assert response_data['pagination']['page'] == 1
     assert response_data['pagination']['size'] == 2
     assert response_data['pagination']['totalPages'] == 2
@@ -59,10 +57,6 @@ def test_pagination_contract_for_books(client):
 
 
 def test_author_deletion_conflict_contract(client):
-    """
-    Перевіряє контракт помилки (409 Conflict) при спробі видалити автора,
-    який має прив'язані книги.
-    """
     author_payload = AuthorBuilder().as_payload()
     author_response = client.post('/api/authors', json=author_payload)
     author_id = author_response.get_json()['id']
