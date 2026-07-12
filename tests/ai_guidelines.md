@@ -72,8 +72,6 @@ For pagination (`Page`, `get_books`, `get_authors`), always cover:
 
 * Testing everything through a single "happy path" helper that all other tests depend on
 * Duplicating setup code instead of using builders or fixtures
-* Leaving "boring" branches untested (e.g., get-by-id not found, delete not found, empty list), as these are often the source of production defects
-* Writing security tests within this strategy (security is outside its scope)
 
 ## 10. Success Criteria
 
